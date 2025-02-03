@@ -49,7 +49,7 @@ const Header = () => {
             <div>
               <FaShoppingCart className="icon" />
             </div>
-            <span className="navItemSpan">0</span>
+            <span className="navItemSpan">1</span>
           </div>
         </Link>
       </div>
