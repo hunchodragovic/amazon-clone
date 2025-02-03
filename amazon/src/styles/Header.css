@@ -1,0 +1,80 @@
+* {
+  font-family: "Lato", sans-serif; /* Apply the Lato font */
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #131921;
+  padding: 10px 20px;
+  color: white;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+}
+.header-logo img {
+  transform: translateY(5px);
+  height: 35px; /* Adjust size */
+  width: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensure the image fits well */
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  max-width: 1050px;
+}
+
+.input {
+  flex: 1;
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+  border-radius: 4px 0 0 4px; /* Rounded corners on the left */
+}
+
+.searchButton {
+  background-color: #febd69;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 4px 4px 0; /* Rounded corners on the right */
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+.nav a {
+  color: white; /* Ensure the text and icon are white */
+  text-decoration: none; /* Remove the underline */
+}
+
+.nav a:hover {
+  color: white; /* Keep the hover color consistent */
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+.navItemSpan {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.icon {
+  font-size: 20px;
+  font-weight: 900;
+  margin-bottom: 2px;
+}
