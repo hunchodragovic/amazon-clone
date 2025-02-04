@@ -8,6 +8,7 @@
   background-color: #131921;
   padding: 10px 20px;
   color: white;
+  z-index: 100;
 }
 .header-logo {
   display: flex;

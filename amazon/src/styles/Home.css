@@ -1,0 +1,24 @@
+.home {
+  display: flex;
+  justify-content: center;
+  width: 100vw; /* Ensure it takes full width */
+  max-width: 100%; /* Remove the 1500px limit */
+  overflow: hidden;
+}
+.home-row {
+  display: flex;
+  z-index: 1;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.home-container {
+  width: 100%; /* Ensure container takes full width */
+}
+.home-image {
+  width: 100vw;
+  height: auto;
+  object-fit: cover;
+  z-index: -1;
+  margin-bottom: -150px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}

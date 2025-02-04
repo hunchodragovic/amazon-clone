@@ -7,7 +7,7 @@ import { useAuth } from "../context/GlobalState";
 import { auth } from "../config/firebase"; // Import Firebase auth
 
 const Header = () => {
-  const { user } = useAuth();
+  const { user, basket } = useAuth();
 
   const handleAuthentication = () => {
     if (user) {
@@ -60,7 +60,7 @@ const Header = () => {
             <div>
               <FaShoppingCart className="icon" />
             </div>
-            <span className="navItemSpan">1</span>
+            <span className="navItemSpan">{basket?.length}</span>
           </div>
         </Link>
       </div>
