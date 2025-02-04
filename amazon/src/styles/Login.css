@@ -5,6 +5,12 @@
   height: 100vh;
   background-color: #f7f7f7;
 }
+.error-message {
+  color: red;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 5px;
+}
 
 .login-box {
   background: white;
@@ -91,4 +97,30 @@ input {
 
 .create-account-btn:hover {
   background-color: #f7f7f7;
+}
+/* LoginLoading.css */
+
+.sign-in-btn.loading {
+  opacity: 0.5; /* Reduce opacity to indicate loading */
+  cursor: not-allowed; /* Change cursor to indicate that the button is not clickable */
+}
+
+.sign-in-btn.loading:after {
+  content: "..."; /* Add three dots when the loading state is active */
+  animation: dots 1s infinite steps(1);
+}
+
+@keyframes dots {
+  0% {
+    content: ".";
+  }
+  33% {
+    content: "..";
+  }
+  66% {
+    content: "...";
+  }
+  100% {
+    content: ".";
+  }
 }
