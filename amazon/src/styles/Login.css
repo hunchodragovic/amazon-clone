@@ -1,0 +1,94 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.login-box {
+  background: white;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 300px;
+}
+
+.amazon-logo {
+  width: 100px;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  text-align: left;
+  margin: 5px 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+input {
+  padding: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.sign-in-btn {
+  background-color: #ffd814;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.sign-in-btn:hover {
+  background-color: #f2c200;
+}
+
+.terms {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.terms a {
+  color: #007185;
+  text-decoration: none;
+}
+
+.terms a:hover {
+  text-decoration: underline;
+}
+
+.new-account {
+  margin-top: 20px;
+}
+.new-account p {
+  font-weight: bold;
+}
+.create-account-btn {
+  background-color: white;
+  border: 1px solid #aaa;
+  padding: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  width: 100%;
+}
+
+.create-account-btn:hover {
+  background-color: #f7f7f7;
+}
