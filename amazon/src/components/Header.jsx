@@ -1,18 +1,26 @@
 import React from "react";
 import "../styles/Header.css";
-import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Logo from "../images/icons/header-logo.png";
+import { useAuth } from "../context/GlobalState";
+import { auth } from "../config/firebase"; // Import Firebase auth
 
 const Header = () => {
+  const { user } = useAuth();
+
+  const handleAuthentication = () => {
+    if (user) {
+      auth.signOut();
+    }
+  };
+
   return (
     <header className="header">
-      {/* Logo as an Image with a Link */}
       <Link to="/" className="header-logo">
         <img src={Logo} alt="Amazon Logo" />
       </Link>
 
-      {/* Search Bar */}
       <div className="search">
         <input type="text" placeholder="Search Amazon" className="input" />
         <button className="searchButton">
@@ -20,13 +28,16 @@ const Header = () => {
         </button>
       </div>
 
-      {/* User & Cart Section */}
       <div className="nav">
-        <Link to="/login">
+        <Link to={!user && "/login"} onClick={handleAuthentication}>
           <div className="navItem">
-            <div className="header-optionLineOne">Hello Guest</div>
             <div className="header-optionLineOne">
-              <span className="navItemSpan">Sign In</span>
+              {user ? `Hello ${user.email}` : "Hello Guest"}
+            </div>
+            <div className="header-optionLineOne">
+              <span className="navItemSpan">
+                {user ? "Sign Out" : "Sign In"}
+              </span>
             </div>
           </div>
         </Link>

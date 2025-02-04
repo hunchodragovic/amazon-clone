@@ -1,3 +1,4 @@
+// AppReducer.jsx (No changes needed, just ensuring user updates correctly)
 export const initialState = {
   basket: [],
   user: null,

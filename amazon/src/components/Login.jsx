@@ -1,32 +1,41 @@
 import "../styles/Login.css";
 import Logo from "../images/icons/Amazon_logo.svg.webp";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
+import { useAuth } from "../context/GlobalState"; // Import the useAuth hook
 
 const Login = () => {
+  const { user } = useAuth(); // Access the user from the global context
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // New state for confirm password
-  const [error, setError] = useState(""); // State for error messages
-  const [isSignup, setIsSignup] = useState(false); // State for toggling between login and signup
-  const [loading, setLoading] = useState(false); // State for loading
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect user to home page if they are already logged in
+    if (user) {
+      navigate("/"); // Redirect to homepage if the user is already logged in
+    }
+  }, [user, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "email") setEmail(value);
     if (name === "password") setPassword(value);
-    if (name === "confirmPassword") setConfirmPassword(value); // Handle confirm password input
+    if (name === "confirmPassword") setConfirmPassword(value);
   };
 
   const signIn = (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading state to true
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((auth) => {
         if (auth) {
@@ -37,20 +46,17 @@ const Login = () => {
         setError("Invalid credentials. Please check your email and password.");
       })
       .finally(() => {
-        setLoading(false); // Set loading state to false once the request is complete
+        setLoading(false);
       });
   };
 
   const register = (e) => {
     e.preventDefault();
-
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
-    setLoading(true); // Set loading state to true
+    setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((auth) => {
         if (auth) {
@@ -61,13 +67,13 @@ const Login = () => {
         setError(error.message);
       })
       .finally(() => {
-        setLoading(false); // Set loading state to false once the request is complete
+        setLoading(false);
       });
   };
 
   const toggleForm = () => {
-    setIsSignup(!isSignup); // Toggle between login and signup form
-    setError(""); // Clear error message when switching forms
+    setIsSignup(!isSignup);
+    setError("");
   };
 
   return (
@@ -87,6 +93,7 @@ const Login = () => {
             onChange={handleChange}
             required
           />
+
           <label>Password</label>
           <input
             type="password"
@@ -95,6 +102,7 @@ const Login = () => {
             onChange={handleChange}
             required
           />
+
           {isSignup && (
             <>
               <label>Confirm Password</label>
@@ -105,16 +113,16 @@ const Login = () => {
                 onChange={handleChange}
                 required
               />
-              {error && <p className="error-message">{error}</p>}{" "}
-              {/* Display error */}
+              {error && <p className="error-message">{error}</p>}
             </>
           )}
-          {error && !isSignup && <p className="error-message">{error}</p>}{" "}
-          {/* Error message for login */}
+
+          {error && !isSignup && <p className="error-message">{error}</p>}
+
           <button
             type="submit"
-            className={`sign-in-btn ${loading ? "loading" : ""}`} // Add the "loading" class when loading
-            disabled={loading} // Disable button while loading
+            className={`sign-in-btn ${loading ? "loading" : ""}`}
+            disabled={loading}
           >
             {loading
               ? isSignup
