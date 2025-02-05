@@ -8,7 +8,10 @@
   width: 100%;
   margin-bottom: 10px;
 }
-
+.checkout-left p {
+  font-weight: bold;
+  font-size: 30px;
+}
 .checkout-title {
   margin-right: 15px;
   padding: 10px;

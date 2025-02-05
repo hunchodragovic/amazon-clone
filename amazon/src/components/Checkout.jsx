@@ -3,7 +3,7 @@ import { useAuth } from "../context/GlobalState";
 import checkoutImg from "../images/checkoutAd.jpg";
 import CheckoutProduct from "./CheckoutProduct";
 import "../styles/Checkout.css";
-import Subtotal from "./Subtotal";
+import Subtotal from "./SubTotal";
 
 const Checkout = () => {
   const { user, basket } = useAuth();
@@ -27,8 +27,9 @@ const Checkout = () => {
             ))
           ) : (
             <p>
-              You have no items in your basket.To buy one or more
-              items,click"Add to basket".
+              You have no items in your basket. <br />
+              To buy one or more items,go to the Products Page and click"Add to
+              basket" to the Product that you want to buy.
             </p>
           )}
         </div>
