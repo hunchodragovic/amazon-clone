@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Checkout from "./components/Checkout";
+import Payment from "./components/Payment";
 const App = () => {
   return (
     <div className="app">
@@ -24,6 +25,15 @@ const App = () => {
             <>
               <Header />
               <Checkout />
+            </>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <>
+              <Header />
+              <Payment />
             </>
           }
         />
