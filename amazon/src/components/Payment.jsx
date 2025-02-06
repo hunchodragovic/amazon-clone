@@ -1,4 +1,5 @@
 import React from "react";
+import { CardElement } from "@stripe/react-stripe-js";
 import { Link } from "react-router-dom";
 import "../styles/Payment.css";
 import { useAuth } from "../context/GlobalState";
@@ -7,6 +8,16 @@ import CurrencyFormat from "react-currency-format";
 import { getBasketTotal } from "../context/AppReducer";
 const Payment = () => {
   const { basket, user } = useAuth();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const handleChange = (e) => {
+    setDisabled(e.empty);
+    setError(error ? error.message : "");
+  };
+
   return (
     <div className="payment">
       <div className="payment-container">
@@ -45,10 +56,8 @@ const Payment = () => {
         <div className="payment-section">
           <h3>Payment Method</h3>
           <div className="payment-details">
-            <form
-            // onSubmit={handleSubmit}
-            >
-              {/* <CardElement onChange={handleChange} /> */}
+            <form onSubmit={handleSubmit}>
+              <CardElement onChange={handleChange} />
               <div className="payment-priceContainer">
                 <CurrencyFormat
                   renderText={(value) => <h3>Order Total : {value}</h3>}
