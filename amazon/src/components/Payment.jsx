@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Payment.css";
@@ -8,7 +8,7 @@ import CurrencyFormat from "react-currency-format";
 import axios from "./axios";
 import { getBasketTotal } from "../context/AppReducer";
 const Payment = () => {
-  const { basket, user } = useAuth();
+  const { basket, user, dispatch } = useAuth();
   const [clientSecret, setClientSecret] = useState();
   const [error, setError] = useState(null);
   const [disabled, setDisabled] = useState(true);
@@ -29,10 +29,31 @@ const Payment = () => {
     getClientSecret();
   }, [basket]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setProcessing(true);
+    const payload = await stripe
+      .confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+        },
+      })
+      .then(({ paymentIntent }) => {
+        const ref = doc(db, "users", user?.uid, "orders", paymentIntent.id);
+        setDoc(ref, {
+          basket: basket,
+          amount: paymentIntent.amount,
+          created: paymentIntent.created,
+        });
+        setSucceeded(true);
+        setError(null);
+        setProcessing(false);
+        dispatch({
+          type: "EMPTY_BASKET",
+        });
+        navigate("/orders", { replace: true });
+      });
   };
-
   const handleChange = (e) => {
     setDisabled(e.empty);
     setError(error ? error.message : "");
