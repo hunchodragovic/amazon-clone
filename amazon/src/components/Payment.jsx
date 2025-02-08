@@ -7,6 +7,8 @@ import CheckoutProduct from "./CheckoutProduct";
 import CurrencyFormat from "react-currency-format";
 import axios from "./axios";
 import { getBasketTotal } from "../context/AppReducer";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
 const Payment = () => {
   const { basket, user, dispatch } = useAuth();
   const [clientSecret, setClientSecret] = useState();
@@ -21,13 +23,17 @@ const Payment = () => {
     const getClientSecret = async () => {
       const response = await axios({
         method: "post",
-        url: `/payments/create?total=${getBasketTotal(basket) * 100}`,
+        url: `http://127.0.0.1:5001/clone-9b843/us-central1/api/payments/create?total=${
+          getBasketTotal(basket) * 100
+        }`,
       });
+
       setClientSecret(response.data.clientSecret);
       return response;
     };
     getClientSecret();
   }, [basket]);
+  console.log(clientSecret);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
