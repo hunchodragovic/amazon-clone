@@ -9,6 +9,7 @@ import axios from "./axios";
 import { getBasketTotal } from "../context/AppReducer";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
+
 const Payment = () => {
   const { basket, user, dispatch } = useAuth();
   const [clientSecret, setClientSecret] = useState();
@@ -19,50 +20,86 @@ const Payment = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
+
   useEffect(() => {
     const getClientSecret = async () => {
-      const response = await axios({
-        method: "post",
-        url: `http://127.0.0.1:5001/clone-9b843/us-central1/api/payments/create?total=${
-          getBasketTotal(basket) * 100
-        }`,
-      });
+      try {
+        const response = await axios({
+          method: "post",
+          url: `http://127.0.0.1:5001/clone-9b843/us-central1/api/payments/create?total=${
+            getBasketTotal(basket) * 100
+          }`,
+        });
 
-      setClientSecret(response.data.clientSecret);
-      return response;
+        setClientSecret(response.data.clientSecret);
+        return response;
+      } catch (error) {
+        console.error("Error getting client secret:", error);
+        setError("Failed to load payment information. Please try again.");
+      }
     };
     getClientSecret();
   }, [basket]);
-  console.log(clientSecret);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!clientSecret) {
+      setError("Client secret not loaded yet.");
+      return;
+    }
+
     setProcessing(true);
-    const payload = await stripe
-      .confirmCardPayment(clientSecret, {
+
+    try {
+      const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
         },
-      })
-      .then(({ paymentIntent }) => {
-        const ref = doc(db, "users", user?.uid, "orders", paymentIntent.id);
-        setDoc(ref, {
-          basket: basket,
-          amount: paymentIntent.amount,
-          created: paymentIntent.created,
-        });
-        setSucceeded(true);
-        setError(null);
-        setProcessing(false);
-        dispatch({
-          type: "EMPTY_BASKET",
-        });
-        navigate("/orders", { replace: true });
       });
+
+      console.log("Stripe result:", result);
+
+      if (result.error) {
+        throw new Error(result.error.message || "Payment confirmation failed");
+      }
+
+      if (!result || !result.paymentIntent) {
+        console.error("Missing payment intent in result:", result);
+        throw new Error("Payment was not confirmed. Please try again.");
+      }
+
+      const { paymentIntent } = result;
+
+      // Check if user is authenticated
+      if (!user || !user.uid) {
+        throw new Error("Please sign in to complete purchase");
+      }
+
+      const ref = doc(db, "users", user.uid, "orders", paymentIntent.id);
+      await setDoc(ref, {
+        basket: basket,
+        amount: paymentIntent.amount,
+        created: paymentIntent.created,
+      });
+
+      setSucceeded(true);
+      setError(null);
+      setProcessing(false);
+      dispatch({
+        type: "EMPTY_BASKET",
+      });
+      navigate("/orders", { replace: true });
+    } catch (error) {
+      console.error("Payment error:", error);
+      setError(`Payment failed: ${error.message}`);
+      setProcessing(false);
+    }
   };
+
   const handleChange = (e) => {
     setDisabled(e.empty);
-    setError(error ? error.message : "");
+    setError(e.error ? e.error.message : "");
   };
 
   return (
@@ -121,7 +158,7 @@ const Payment = () => {
                   <span>{processing ? <p>Processing</p> : "Buy Now"}</span>
                 </button>
               </div>
-              {error && <div>{error}</div>}
+              {error && <div className="payment-error">{error}</div>}
             </form>
           </div>
         </div>
